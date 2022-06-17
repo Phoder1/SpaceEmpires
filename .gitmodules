@@ -1,0 +1,3 @@
+[submodule "Packages/com.alontalmi.utillities"]
+	path = Packages/com.alontalmi.utillities
+	url = https://github.com/Phoder1/com.alontalmi.utillities.git
