@@ -1,3 +1,4 @@
+using Phoder1.Core.Attributes;
 using System;
 using UniRx;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Phoder1.SpaceEmpires
     [Serializable]
     public class TurnsManager : ITurnsManager
     {
-        [SerializeField]
+        [SerializeField, Inline(true)]
         private ReactiveProperty<float> turnsPerSecond;
 
         private readonly ReactiveProperty<int> turnCount = new ReactiveProperty<int>(0);
