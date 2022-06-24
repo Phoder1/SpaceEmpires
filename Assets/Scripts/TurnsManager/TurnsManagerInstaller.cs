@@ -1,7 +1,6 @@
-﻿using Phoder1.Core.Zenject;
+﻿using UniKit.Core.Zenject;
 
-namespace Phoder1.SpaceEmpires.Installers
+namespace Phoder1.SpaceEmpires
 {
-    public class TurnsManagerInstaller : GenericInstallerByInstance<ITurnsManager, TurnsManager> { }
-
+    public class TurnsManagerInstaller : GenericInstallerByInstance<IEntityTurnsManager, EntityTurnsManager> { }
 }

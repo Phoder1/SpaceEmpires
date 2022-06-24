@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -12,12 +10,12 @@ namespace Phoder1.SpaceEmpires
         bool CanMoveDiagonally { get; }
         int MovementSpeed { get; }
     }
-    public class Entity : MonoBehaviour, IEntity
+    public abstract class Entity : MonoBehaviour, IEntity
     {
         [SerializeField]
-        private bool canMoveDiagonally;
+        private bool canMoveDiagonally = true;
         [SerializeField]
-        private int movementSpeed;
+        private int movementSpeed = 5;
 
         [Inject]
         IBoard board;
@@ -26,5 +24,10 @@ namespace Phoder1.SpaceEmpires
         public Transform Transform => transform;
         public bool CanMoveDiagonally => canMoveDiagonally;
         public int MovementSpeed => movementSpeed;
+
+        protected virtual void Awake()
+        {
+            board.Add(this);
+        }
     }
 }

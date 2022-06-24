@@ -1,4 +1,4 @@
-﻿using Phoder1.Core.Zenject;
+﻿using UniKit.Core.Zenject;
 
 namespace Phoder1.SpaceEmpires
 {
