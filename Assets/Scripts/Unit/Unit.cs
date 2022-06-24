@@ -1,9 +1,15 @@
 using Zenject;
 using UnityEngine;
+using UniRx;
+using System;
 
 namespace Phoder1.SpaceEmpires
 {
-    public abstract class Unit : Entity, ITurnTakeable
+    public interface IUnit : ITurnTakeable
+    {
+        IColony Colony { get; }
+    }
+    public abstract class Unit : Entity, IUnit
     {
         [SerializeField]
         private float speed = 1;
@@ -13,6 +19,8 @@ namespace Phoder1.SpaceEmpires
 
         public float Speed => speed;
 
+        public virtual IColony Colony { get; private set; }
+
         public abstract ITurnAction TakeAction(int turnNumber);
 
         protected override void Awake()
@@ -20,6 +28,12 @@ namespace Phoder1.SpaceEmpires
             base.Awake();
 
             turnsManager.Subscribe(this);
+            Colony.ColonyColor.Subscribe(UpdateColor);
+        }
+
+        private void UpdateColor(Color obj)
+        {
+            MainSpriteRenderer.color = obj;
         }
     }
 }

@@ -9,6 +9,7 @@ namespace Phoder1.SpaceEmpires
         Vector2Int BoardPosition { get; }
         bool CanMoveDiagonally { get; }
         int MovementSpeed { get; }
+        SpriteRenderer MainSpriteRenderer { get; }
     }
     public abstract class Entity : MonoBehaviour, IEntity
     {
@@ -16,6 +17,8 @@ namespace Phoder1.SpaceEmpires
         private bool canMoveDiagonally = true;
         [SerializeField]
         private int movementSpeed = 5;
+        [SerializeField]
+        private SpriteRenderer mainSprite;
 
         [Inject]
         IBoard board;
@@ -24,6 +27,7 @@ namespace Phoder1.SpaceEmpires
         public Transform Transform => transform;
         public bool CanMoveDiagonally => canMoveDiagonally;
         public int MovementSpeed => movementSpeed;
+        public SpriteRenderer MainSpriteRenderer => mainSprite;
 
         protected virtual void Awake()
         {
