@@ -50,12 +50,19 @@ namespace Phoder1.SpaceEmpires
             MainSpriteRenderer.color = obj;
         }
 
-        public static Unit Instantiate(Unit prefab, IColony colony, Vector2Int position, DiContainer container)
+        public static Unit Instantiate(Unit prefab, IColony colony, Vector2Int position, DiContainer container, Transform parent = null)
         {
-            var newUnit = container.InstantiatePrefabForComponent<Unit>(prefab);
+            prefab.gameObject.SetActive(false);
+            var newUnit = container.InstantiatePrefabForComponent<Unit>(prefab, parent);
+            prefab.gameObject.SetActive(true);
+
+            //Zenject insists on parenting the object to it's container transform if no parent has been set...
+            newUnit.transform.SetParent(parent);
+
             newUnit.Colony = colony;
             newUnit.Transform.position = position.GridToWorldPosition();
 
+            newUnit.gameObject.SetActive(true);
             newUnit.Init();
             return newUnit;
         }

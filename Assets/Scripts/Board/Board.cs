@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections.Generic;
 using UniKit;
 using UniKit.Project;
 using UniKit.Types;
@@ -21,8 +22,11 @@ namespace Phoder1.SpaceEmpires
         Result CanMove(IEntity unit, Vector2Int to);
         Result TryMove(IEntity unit, Vector2Int to);
         Result ForceMove(IEntity unit, Vector2Int to, bool overrunOtherEntities = false);
-        public Result Add(IEntity entity, Vector2Int position);
-        public Result Add(IEntity entity);
+        Result Add(IEntity entity, Vector2Int position);
+        Result Add(IEntity entity);
+        TEntity FindNearest<TEntity>(IEntity from)
+            where TEntity : class, IEntity;
+        GridPathfindResult MoveAsCloseAsPossibleTo(IEntity entity, Vector2Int to);
     }
     [Serializable]
     public class Board : MonoBehaviour, IBoard
@@ -109,11 +113,25 @@ namespace Phoder1.SpaceEmpires
 
         private bool ReachedTarget(Vector2Int targetPosition, Vector2Int currentPosition, GridPathfindingSettings settings)
             => currentPosition.IsNeighborOf(targetPosition, settings.canMoveDiagonaly);
+        public TEntity FindNearest<TEntity>(IEntity from)
+            where TEntity : class, IEntity
+        {
+            var pos = from.BoardPosition;
+            var tiles = new List<KeyValuePair<Vector2Int, IEntity>>(Map);
 
+            //Sort by distance
+            tiles.Sort((a, b) => a.Key.TileSteps(pos, from.CanMoveDiagonally).CompareTo(b.Key.TileSteps(pos, from.CanMoveDiagonally)));
+
+            foreach (var tile in tiles)
+                if (tile.Value is TEntity target)
+                    return target;
+
+            return null;
+        }
         private void OnDrawGizmosSelected()
         {
             Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(boardArea.center - (Vector2)boardArea.size / 2, (Vector2)boardArea.size + Vector2.one * (TileSize / 2));
+            Gizmos.DrawWireCube(boardArea.center, (Vector2)boardArea.size);
         }
     }
 

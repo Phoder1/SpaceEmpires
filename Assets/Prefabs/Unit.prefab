@@ -7,22 +7,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5019007780283608477, guid: 8ea32fe42f533c24783268bf6a8fd5f3, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 05e480a61c37f60468bd11d47b3f77f4, type: 3}
-    - target: {fileID: 5019007780283608477, guid: 8ea32fe42f533c24783268bf6a8fd5f3, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5019007780283608477, guid: 8ea32fe42f533c24783268bf6a8fd5f3, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5019007780283608477, guid: 8ea32fe42f533c24783268bf6a8fd5f3, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8091505767761246368, guid: 8ea32fe42f533c24783268bf6a8fd5f3, type: 3}
       propertyPath: m_Name
       value: Unit
@@ -69,10 +53,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8091505767761246369, guid: 8ea32fe42f533c24783268bf6a8fd5f3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8091505767761246398, guid: 8ea32fe42f533c24783268bf6a8fd5f3, type: 3}
-      propertyPath: gridPosition.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

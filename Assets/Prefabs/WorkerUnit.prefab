@@ -65,11 +65,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
---- !u!212 &1443981552936775260 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 5719545529073113149, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
-  m_PrefabInstance: {fileID: 6581419080112207457}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2443159683101653857 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8841196093065956608, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
@@ -89,5 +84,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMoveDiagonally: 1
   movementSpeed: 5
-  mainSprite: {fileID: 1443981552936775260}
   speed: 1
+  canMine: 0
+  canAttack: 0

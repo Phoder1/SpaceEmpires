@@ -18,9 +18,9 @@ namespace Phoder1.SpaceEmpires
         private bool canMoveDiagonally = true;
         [SerializeField]
         private int movementSpeed = 5;
-        [SerializeField]
-        private SpriteRenderer mainSprite;
 
+        [Inject]
+        protected SpriteRenderer mainSprite;
         [Inject]
         protected IBoard board;
 
