@@ -5,6 +5,7 @@ using UniKit.Project;
 using UniKit.Types;
 using UnityEngine;
 using Zenject;
+using static UniKit.AStar;
 
 namespace Phoder1.SpaceEmpires
 {
@@ -14,7 +15,8 @@ namespace Phoder1.SpaceEmpires
         /// The map contains all the unit's positions
         /// </summary>
         IReadonlyMap<Vector2Int, IEntity> Map { get; }
-        float BoardSize { get; }
+        float TileSize { get; }
+        RectInt BoardArea { get; }
         bool TileOccupied(Vector2Int tilePos);
         Result CanMove(IEntity unit, Vector2Int to);
         Result TryMove(IEntity unit, Vector2Int to);
@@ -25,15 +27,21 @@ namespace Phoder1.SpaceEmpires
     [Serializable]
     public class Board : MonoBehaviour, IBoard
     {
+        [SerializeField]
+        private RectInt boardArea = new RectInt(Vector2Int.zero, Vector2Int.one * 10);
+
         [Inject]
         private ITurns turns;
 
         private readonly Map<Vector2Int, IEntity> map = new Map<Vector2Int, IEntity>();
-        private Lazy<float> boardSize = new Lazy<float>();
+        private Lazy<float> tileSize = new Lazy<float>(() => ProjectPrefs.GetFloat("Tile size"));
 
         public IReadonlyMap<Vector2Int, IEntity> Map => map;
 
-        public float BoardSize => boardSize.Value;
+        public float TileSize => tileSize.Value;
+
+        public RectInt BoardArea => boardArea;
+
         public Result Add(IEntity entity)
             => Add(entity, entity.Transform.position.WorldToGridPosition());
         public Result Add(IEntity entity, Vector2Int position)
@@ -71,7 +79,16 @@ namespace Phoder1.SpaceEmpires
         public bool TileOccupied(Vector2Int tilePos)
             => Map.TryGetValue(tilePos, out var occupyingEntity)
             && occupyingEntity != null;
+        public bool IsTileTraversable(Vector2Int tilePos)
+        {
+            if (TileOccupied(tilePos))
+                return false;
 
+            if (!boardArea.IsPointInside(tilePos))
+                return false;
+
+            return true;
+        }
         public Result TryMove(IEntity entity, Vector2Int to)
         {
             var result = CanMove(entity, to);
@@ -80,16 +97,34 @@ namespace Phoder1.SpaceEmpires
 
             return ForceMove(entity, to);
         }
+
+        public GridPathfindResult MoveAsCloseAsPossibleTo(IEntity entity, Vector2Int to)
+            => GetPath(entity, to);
+
+        private GridPathfindResult GetPath(IEntity entity, Vector2Int to)
+        {
+            var settings = new GridPathfindingSettings(IsTileTraversable, entity.CanMoveDiagonally, false, ReachedTarget);
+            return entity.BoardPosition.GetStepsToTarget(to, settings);
+        }
+
+        private bool ReachedTarget(Vector2Int targetPosition, Vector2Int currentPosition, GridPathfindingSettings settings)
+            => currentPosition.IsNeighborOf(targetPosition, settings.canMoveDiagonaly);
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireCube(boardArea.center - (Vector2)boardArea.size / 2, (Vector2)boardArea.size + Vector2.one * (TileSize / 2));
+        }
     }
 
     public static class BoardExt
     {
-        public static float GridSize => ProjectPrefs.GetFloat("Grid size");
+        public static float TileSize = ProjectPrefs.GetFloat("Tile size");
         public static Vector2 GridToWorldPosition(this Vector2Int gridPos)
-            => (Vector2)gridPos * GridSize;
+            => (Vector2)gridPos * TileSize;
         public static Vector2Int WorldToGridPosition(this Vector3 worldPos)
             => ((Vector2)worldPos).WorldToGridPosition();
         public static Vector2Int WorldToGridPosition(this Vector2 worldPos)
-            => Vector2Int.RoundToInt(worldPos / GridSize);
+            => Vector2Int.RoundToInt(worldPos / TileSize);
     }
 }

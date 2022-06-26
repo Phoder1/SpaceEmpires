@@ -13,8 +13,14 @@ MonoBehaviour:
   m_Name: ProjectPrefAsset
   m_EditorClassIdentifier: 
   prefsSettings:
-    intProperties: []
+    intProperties:
+    - name: Initial resources
+      value: 50
     stringProperties: []
     floatProperties:
-    - name: Grid size
+    - name: Tile size
       value: 1
+    gameObjectProperties:
+    - name: Worker prefab
+      value: {fileID: 2443159683101653857, guid: 5985aca708159cd4e89ece38f2d21072, type: 3}
+    spriteProperties: []

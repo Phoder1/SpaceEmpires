@@ -11,11 +11,25 @@ namespace Phoder1.SpaceEmpires
     {
         [SerializeField]
         private Color startColor;
+        [SerializeField]
+        private bool troll = false;
 
         Dictionary<IColony, ReactiveProperty<Color>> colonyColors = new Dictionary<IColony, ReactiveProperty<Color>>();
         Dictionary<IColony, IReadOnlyReactiveProperty<Color>> readonlyColonyColors = new Dictionary<IColony, IReadOnlyReactiveProperty<Color>>();
         public IReadOnlyDictionary<IColony, IReadOnlyReactiveProperty<Color>> ColonyColors => readonlyColonyColors;
 
+        private void Update()
+        {
+            if (troll)
+            {
+                foreach (KeyValuePair<IColony, ReactiveProperty<Color>> color in colonyColors)
+                {
+                     Color.RGBToHSV(color.Value.Value, out var h, out var s, out var v);
+
+                    color.Value.Value = Color.HSVToRGB(Normalized(h + 0.1f * Time.deltaTime), s, v);
+                }
+            }
+        }
         public IReadOnlyReactiveProperty<Color> AddColony(IColony newColony)
         {
             if(colonyColors.TryGetValue(newColony, out var newColonyColor))

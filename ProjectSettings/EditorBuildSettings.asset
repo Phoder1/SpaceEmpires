@@ -8,4 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainScene.unity
     guid: f9cd3e5a0426d8a47a361482d1e04d00
+  - enabled: 1
+    path: Assets/Scenes/PathfindingTestScene.unity
+    guid: e3a21dbeb32145e4391c750dcad65d49
   m_configObjects: {}

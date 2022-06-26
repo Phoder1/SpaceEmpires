@@ -15,7 +15,7 @@ namespace Phoder1.SpaceEmpires
         {
             if (Application.isPlaying)
                 return;
-            if (!ProjectPrefs.HasKey("Grid size"))
+            if (!ProjectPrefs.HasKey("Tile size"))
                 return;
 
             UpdateGridSize();
@@ -24,7 +24,7 @@ namespace Phoder1.SpaceEmpires
         }
         private void UpdateGridSize()
         {
-            var newGridSize = ProjectPrefs.GetFloat("Grid size");
+            var newGridSize = ProjectPrefs.GetFloat("Tile size");
 
             gridSize = newGridSize;
         }

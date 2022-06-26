@@ -11,6 +11,7 @@ namespace Phoder1.SpaceEmpires
         int MovementSpeed { get; }
         SpriteRenderer MainSpriteRenderer { get; }
     }
+    [SelectionBase]
     public abstract class Entity : MonoBehaviour, IEntity
     {
         [SerializeField]
@@ -21,7 +22,9 @@ namespace Phoder1.SpaceEmpires
         private SpriteRenderer mainSprite;
 
         [Inject]
-        IBoard board;
+        protected IBoard board;
+
+        bool _initialized = false;
 
         public Vector2Int BoardPosition => board.Map[this];
         public Transform Transform => transform;
@@ -29,7 +32,21 @@ namespace Phoder1.SpaceEmpires
         public int MovementSpeed => movementSpeed;
         public SpriteRenderer MainSpriteRenderer => mainSprite;
 
-        protected virtual void Awake()
+        void Awake()
+        {
+            Init();
+        }
+
+        protected void Init()
+        {
+            if (_initialized)
+                return;
+
+            _initialized = true;
+
+            OnInit();
+        }
+        protected virtual void OnInit()
         {
             board.Add(this);
         }
