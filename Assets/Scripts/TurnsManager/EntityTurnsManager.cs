@@ -11,7 +11,7 @@ namespace Phoder1.SpaceEmpires
     {
         ITurns Turns { get; }
         IReadOnlyList<ITurnTakeable> EntityTurns { get; }
-        void Subscribe(ITurnTakeable turnTakeable);
+        IDisposable Subscribe(ITurnTakeable turnTakeable);
         float GetEntityNextTurn(ITurnTakeable turnTakeable);
         void Unsubscribe(ITurnTakeable turnTakeable);
 
@@ -26,8 +26,10 @@ namespace Phoder1.SpaceEmpires
         {
             Turns = turns;
             Turns.TurnNumber.Subscribe(TakeTurn);
+            Turns.TurnEnded.Subscribe(TurnEnded);
         }
 
+        private ITurnTakeable currentActive = null;
         private void TakeTurn(int turnNumber)
         {
             if (EntityTurns.Count == 0)
@@ -47,6 +49,7 @@ namespace Phoder1.SpaceEmpires
                 }
 
                 PlayEntityTurn(turnNumber, nextEntity);
+                break;
             }
         }
 
@@ -55,17 +58,32 @@ namespace Phoder1.SpaceEmpires
             var action = nextEntity.TakeAction(turnNumber);
             Debug.Log($"{nextEntity.Transform.gameObject.name} did {action.ActionName}");
             lastTurnPlayed[nextEntity] = turnNumber;
+            currentActive = nextEntity;
         }
+        private void TurnEnded(int turnNumber)
+        {
+            if (currentActive == null)
+                return;
 
+            currentActive.StopAction();
+        }
         public ITurns Turns { get; private set; }
 
         private readonly List<ITurnTakeable> entityTurns = new List<ITurnTakeable>();
         public IReadOnlyList<ITurnTakeable> EntityTurns => entityTurns;
 
-        public void Subscribe(ITurnTakeable turnTakeable)
+        public IDisposable Subscribe(ITurnTakeable turnTakeable)
         {
             entityTurns.Add(turnTakeable);
             SortEntities();
+
+            return Disposable.Create(Unsubscribe);
+
+            void Unsubscribe()
+            {
+                entityTurns.Remove(turnTakeable);
+                SortEntities();
+            }
         }
 
         private void SortEntities()

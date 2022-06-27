@@ -2,11 +2,11 @@ using UniKit;
 
 namespace Phoder1.SpaceEmpires
 {
-    public class WorkerUnit : Unit, ITurnTakeable
+    public class WorkerUnit : Unit
     {
-        public override ITurnAction TakeAction(int turnNumber)
+        protected override ITurnAction Action(int turnNumber)
         {
-            var nearestResource = board.FindNearest<Resource>(this);
+            var nearestResource = board.FindNearestInteractable<Resource>(this, true);
             if (nearestResource == null)
                 return Fallback();
 

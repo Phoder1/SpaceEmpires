@@ -63,8 +63,17 @@ PrefabInstance:
       propertyPath: gridPosition.x
       value: -9
       objectReference: {fileID: 0}
+    - target: {fileID: 8841196093065956638, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
+      propertyPath: gridPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
+--- !u!212 &2157677264608811980 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5090327356269211053, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
+  m_PrefabInstance: {fileID: 6581419080112207457}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2443159683101653857 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8841196093065956608, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
@@ -83,7 +92,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMoveDiagonally: 1
-  movementSpeed: 5
+  movementSpeed: 2
+  removeFromBoardOnRuined: 0
+  hp:
+    value: 0
   speed: 1
-  canMine: 0
+  canMine: 1
   canAttack: 0
+  activeSymbol: {fileID: 2157677264608811980}

@@ -19,10 +19,11 @@ namespace Phoder1.SpaceEmpires
         private bool canMine;
         [SerializeField]
         private bool canAttack;
+        [SerializeField]
+        private SpriteRenderer activeSymbol;
 
         [Inject]
         private IEntityTurnsManager turnsManager;
-
 
         public float Speed => speed;
 
@@ -31,18 +32,22 @@ namespace Phoder1.SpaceEmpires
         public bool CanMine => canMine;
 
         public bool CanAttack => canAttack;
-
-        public virtual ITurnAction TakeAction(int turnNumber)
+        public ITurnAction TakeAction(int turnNumber)
+        {
+            activeSymbol.enabled = true;
+            return Action(turnNumber);
+        }
+        protected virtual ITurnAction Action(int turnNumber)
         {
             return new TurnAction("Wait");
         }
-
+        public void StopAction() => activeSymbol.enabled = false;
         protected override void OnInit()
         {
             base.OnInit();
 
-            turnsManager.Subscribe(this);
-            Colony.ColonyColor.Subscribe(UpdateColor);
+            turnsManager.Subscribe(this).AddTo(onRuinedDisposables);
+            Colony.ColonyColor.Subscribe(UpdateColor).AddTo(onRuinedDisposables);
         }
 
         private void UpdateColor(Color obj)

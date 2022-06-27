@@ -25,7 +25,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8841196093065956609, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 3
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 8841196093065956609, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
       propertyPath: m_LocalPosition.z
@@ -88,6 +88,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMoveDiagonally: 1
   movementSpeed: 5
-  speed: 2
+  removeFromBoardOnRuined: 0
+  hp:
+    value: 100
+  speed: 1
   canMine: 0
   canAttack: 1
+  activeSymbol: {fileID: 3392108994435563320}
+--- !u!212 &3392108994435563320 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5090327356269211053, guid: f528d793f2805d245bf40ecd467c84ad, type: 3}
+  m_PrefabInstance: {fileID: 7617637465659806357}
+  m_PrefabAsset: {fileID: 0}
