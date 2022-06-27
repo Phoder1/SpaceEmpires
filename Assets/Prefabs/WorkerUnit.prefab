@@ -95,7 +95,7 @@ MonoBehaviour:
   movementSpeed: 2
   removeFromBoardOnRuined: 0
   hp:
-    value: 0
+    value: 100
   speed: 1
   canMine: 1
   attackDamage: 0

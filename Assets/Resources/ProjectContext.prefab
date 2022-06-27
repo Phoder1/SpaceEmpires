@@ -138,6 +138,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startColor: {r: 0.31248996, g: 0.7735849, b: 0.22258809, a: 1}
   troll: 0
+  trollCycleTime: 4
 --- !u!114 &8169168759875245931
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -29,6 +29,9 @@ namespace Phoder1.SpaceEmpires
             where TEntity : class, IEntity;
         Result<GridPathfindResult> MoveAsCloseAsPossibleTo(IEntity entity, Vector2Int to);
         int CountEntities<T>(Predicate<T> predicate);
+        Dictionary<TEntity, int> GetAllInRange<TEntity>(IEntity from, int range, Predicate<TEntity> predicate, bool usePathDistance = false)
+            where TEntity : class, IEntity;
+        GridPathfindResult GetPath(IEntity entity, Vector2Int to);
     }
     [Serializable]
     public class Board : MonoBehaviour, IBoard
@@ -132,7 +135,7 @@ namespace Phoder1.SpaceEmpires
             return pathfindingResult;
         }
 
-        private GridPathfindResult GetPath(IEntity entity, Vector2Int to)
+        public GridPathfindResult GetPath(IEntity entity, Vector2Int to)
         {
             var settings = new GridPathfindingSettings(IsTileTraversable, entity.CanMoveDiagonally, false, ReachedTarget);
             return entity.BoardPosition.GetStepsToTarget(to, settings);
@@ -181,7 +184,6 @@ namespace Phoder1.SpaceEmpires
             where TEntity : class, IEntity
         {
             var entities = new Dictionary<TEntity, int>();
-            int count = 0;
 
             foreach (var tile in Map)
             {
@@ -194,7 +196,8 @@ namespace Phoder1.SpaceEmpires
                     else
                         distance = from.BoardPosition.TileSteps(target.BoardPosition, from.CanMoveDiagonally);
 
-                    entities.Add(target, distance);
+                    if (distance < range)
+                        entities.Add(target, distance);
                 }
             }
 

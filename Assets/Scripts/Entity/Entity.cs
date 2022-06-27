@@ -1,6 +1,8 @@
+using System;
 using UniKit.Attributes;
 using UniRx;
 using UnityEngine;
+using UnityEngine.UI;
 using Zenject;
 
 namespace Phoder1.SpaceEmpires
@@ -27,7 +29,8 @@ namespace Phoder1.SpaceEmpires
         [SerializeField, Inline(true)]
         private ReactiveProperty<int> hp = new ReactiveProperty<int>(100);
 
-
+        [Inject(Id = "HpBar")]
+        private Image hpBar;
         [Inject]
         protected SpriteRenderer mainSprite;
         [Inject]
@@ -43,6 +46,7 @@ namespace Phoder1.SpaceEmpires
         public IReactiveProperty<int> HP => hp;
         public IReadOnlyReactiveProperty<bool> Ruined => ruined;
 
+        private int initialHp;
 
         protected CompositeDisposable onRuinedDisposables = new CompositeDisposable();
 
@@ -62,10 +66,21 @@ namespace Phoder1.SpaceEmpires
         }
         protected virtual void OnInit()
         {
-            hp.Where((x) => x <= 0).Subscribe((x) => ruined.Value = true);
+            initialHp = hp.Value;
+            var deathObservable = hp.Select((x) => x <= 0);
+            var relativeHpObserv = hp.Select((x) => (float)x / (float)initialHp);
+
+            relativeHpObserv.Subscribe(HpChanged); 
+
             var boardSub = board.Add(this);
             if (boardSub && removeFromBoardOnRuined)
                 boardSub.Value.AddTo(onRuinedDisposables);
+        }
+
+        private void HpChanged(float hpFill)
+        {
+            hpBar.gameObject.SetActive(hpFill < 1f);
+            hpBar.fillAmount = hpFill;
         }
 
         protected virtual void Ruine()

@@ -16,6 +16,8 @@ MonoBehaviour:
     intProperties:
     - name: Initial resources
       value: 50
+    - name: Kill reward
+      value: 20
     stringProperties: []
     floatProperties:
     - name: Tile size

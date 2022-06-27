@@ -87,7 +87,7 @@ namespace Phoder1.SpaceEmpires
                 return -1;
 
             int resourcesCount = board.CountEntities<Resource>((x) => x.IsInteractable());
-            return Mathf.Lerp(0, maxSpawnScore, (float)resourcesCount / (float)maxSpawnScoreAmount);
+            return Mathf.Lerp(0, maxSpawnScore, (float)resourcesCount / (float)maxSpawnScoreAmount) - aggressivness;
         }
 
         private ITurnAction SpawnWorker(int arg)

@@ -87,13 +87,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canMoveDiagonally: 1
-  movementSpeed: 5
+  movementSpeed: 3
   removeFromBoardOnRuined: 0
   hp:
     value: 100
   speed: 1
   canMine: 0
-  attackDamage: 0
+  attackDamage: 25
   activeSymbol: {fileID: 2592657306019083084}
   actionSelector:
     maxScoreLenience: 4

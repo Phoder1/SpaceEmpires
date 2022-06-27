@@ -5,10 +5,12 @@ using System;
 using UniKit.Attributes;
 using System.Collections.Generic;
 using Random = System.Random;
+using UniKit;
+using UniKit.Project;
 
 namespace Phoder1.SpaceEmpires
 {
-    public interface IUnit : ITurnTakeable
+    public interface IUnit : ITurnTakeable, IInteractable
     {
         IColony Colony { get; }
         bool CanMine { get; }
@@ -32,6 +34,7 @@ namespace Phoder1.SpaceEmpires
         [Inject]
         protected Random random;
 
+        private int KillReward => ProjectPrefs.GetInt("Kill reward");
         public float Speed => speed;
         public virtual IColony Colony { get; private set; }
         public bool CanMine => canMine;
@@ -59,10 +62,11 @@ namespace Phoder1.SpaceEmpires
         public void StopAction() => activeSymbol.enabled = false;
         protected override void OnInit()
         {
-            base.OnInit();
+            onRuinedDisposables.AddTo(gameObject);
+            onRuinedDisposables.Add(turnsManager.Subscribe(this));
+            onRuinedDisposables.Add(Colony.ColonyColor.Subscribe(UpdateColor));
 
-            turnsManager.Subscribe(this).AddTo(onRuinedDisposables);
-            Colony.ColonyColor.Subscribe(UpdateColor).AddTo(onRuinedDisposables);
+            base.OnInit();
         }
 
         private void UpdateColor(Color obj)
@@ -88,5 +92,28 @@ namespace Phoder1.SpaceEmpires
         }
 
         private static ITurnAction WaitAction(int arg) => new TurnAction("Wait");
+
+        public bool IsInteractable()
+            => !Ruined.Value;
+
+        public bool CanInteract(IUnit entity)
+            => IsInteractable()
+            && !entity.Ruined.Value
+            && entity.AttackDamage > 0
+            && entity.BoardPosition.IsNeighborOf(BoardPosition, entity.CanMoveDiagonally);
+
+        public void Interact(IUnit entity)
+        {
+            if (!CanInteract(entity))
+                return;
+
+            HP.Value -= entity.AttackDamage;
+
+            if (HP.Value <= 0)
+            {
+                entity.Colony.AddResources(KillReward);
+                Ruine();
+            }
+        }
     }
 }

@@ -13,6 +13,8 @@ namespace Phoder1.SpaceEmpires
         private Color startColor;
         [SerializeField]
         private bool troll = false;
+        [SerializeField]
+        private float trollCycleTime = 10;
 
         Dictionary<IColony, ReactiveProperty<Color>> colonyColors = new Dictionary<IColony, ReactiveProperty<Color>>();
         Dictionary<IColony, IReadOnlyReactiveProperty<Color>> readonlyColonyColors = new Dictionary<IColony, IReadOnlyReactiveProperty<Color>>();
@@ -25,8 +27,8 @@ namespace Phoder1.SpaceEmpires
                 foreach (KeyValuePair<IColony, ReactiveProperty<Color>> color in colonyColors)
                 {
                      Color.RGBToHSV(color.Value.Value, out var h, out var s, out var v);
-
-                    color.Value.Value = Color.HSVToRGB(Normalized(h + 0.1f * Time.deltaTime), s, v);
+                    var hStep = Time.deltaTime / trollCycleTime;
+                    color.Value.Value = Color.HSVToRGB(Normalized(h + hStep), s, v);
                 }
             }
         }
