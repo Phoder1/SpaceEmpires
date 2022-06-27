@@ -23,4 +23,6 @@ MonoBehaviour:
     gameObjectProperties:
     - name: Worker prefab
       value: {fileID: 2443159683101653857, guid: 5985aca708159cd4e89ece38f2d21072, type: 3}
+    - name: Soldier prefab
+      value: {fileID: 2300421139500045281, guid: b602d9f3a19ace94f98076605b889d5d, type: 3}
     spriteProperties: []

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UniKit;
 using UniKit.Attributes;
@@ -22,15 +21,17 @@ namespace Phoder1.SpaceEmpires
         private const int WorkerCost = 25;
         private const int SoldierCost = 25;
 
-        [SerializeField, Inline]
-        private ActionSelector actionSelector;
+        [SerializeField]
+        private float maxSpawnScore;
+        [SerializeField]
+        private int maxSpawnScoreAmount;
+        [SerializeField]
+        private float aggressivness = 0;
 
         [Inject]
         protected ColonyColorPool colonyColorPool;
         [Inject]
         protected DiContainer container;
-        [Inject]
-        private Random random;
 
         private ReactiveProperty<int> resources = new ReactiveProperty<int>();
         public IReadOnlyReactiveProperty<Color> ColonyColor { get; private set; }
@@ -45,20 +46,22 @@ namespace Phoder1.SpaceEmpires
         };
 
         public IReadOnlyReactiveProperty<int> Resources => resources;
+        protected override IEnumerable<ActionOption> ActionOptions
+        {
+            get
+            {
+                foreach (var item in base.ActionOptions)
+                    yield return item;
 
-        private List<ActionOption> actionOptions;
+                yield return new ActionOption(SpawnWorker, WorkerScore);
+                yield return new ActionOption(SpawnSoldier, SoldierScore);
+            }
+        }
 
         protected override void OnInit()
         {
             resources.Value = ProjectPrefs.GetInt("Initial resources");
             ColonyColor = colonyColorPool.AddColony(this);
-
-            actionOptions = new List<ActionOption>()
-            {
-                new ActionOption(WaitAction, () => 0),
-                new ActionOption(SpawnWorker, WorkerScore),
-                new ActionOption(SpawnSoldier, SoldierScore)
-            };
             base.OnInit();
         }
 
@@ -67,26 +70,24 @@ namespace Phoder1.SpaceEmpires
             if (GetFreeSpawnPosition() == null || resources.Value < SoldierCost)
                 return -1;
 
-            return 2;
+            int enemiesCount = board.CountEntities<IUnit>((x) => x.Colony != Colony);
+            return Mathf.Lerp(0, maxSpawnScore, (float)enemiesCount / (float)maxSpawnScoreAmount) + aggressivness;
         }
         private ITurnAction SpawnSoldier(int arg)
         {
-            throw new NotImplementedException();
-        }
-
-
-        protected override ITurnAction Action(int turnNumber)
-        {
-            var action = actionSelector.SelectAction(actionOptions, random);
-
-            return action.Action(turnNumber);
+            var spawnPos = GetFreeSpawnPosition();
+            var prefab = ProjectPrefs.GetGameObject("Soldier prefab").GetComponent<Unit>();
+            Instantiate(prefab, this, spawnPos.Value, container);
+            resources.Value -= SoldierCost;
+            return new TurnAction("Spawned Soldier");
         }
         private float WorkerScore()
         {
             if (GetFreeSpawnPosition() == null || resources.Value < WorkerCost)
                 return -1;
 
-            return 2;
+            int resourcesCount = board.CountEntities<Resource>((x) => x.IsInteractable());
+            return Mathf.Lerp(0, maxSpawnScore, (float)resourcesCount / (float)maxSpawnScoreAmount);
         }
 
         private ITurnAction SpawnWorker(int arg)
@@ -95,12 +96,8 @@ namespace Phoder1.SpaceEmpires
             var prefab = ProjectPrefs.GetGameObject("Worker prefab").GetComponent<Unit>();
             Instantiate(prefab, this, spawnPos.Value, container);
             resources.Value -= WorkerCost;
-            return new TurnAction("Spawn");
+            return new TurnAction("Spawned Worker");
         }
-
-        private static ITurnAction WaitAction(int arg) => new TurnAction("Wait");
-
-
 
         private Vector2Int? GetFreeSpawnPosition()
         {

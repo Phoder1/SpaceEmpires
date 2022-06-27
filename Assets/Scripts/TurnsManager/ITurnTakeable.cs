@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = System.Random;
 
@@ -44,13 +45,13 @@ namespace Phoder1.SpaceEmpires
         [SerializeField]
         private float maxScoreLenience = 4;
 
-        public ActionOption SelectAction(List<ActionOption> actionOptions, Random random)
+        public ActionOption SelectAction(IEnumerable<ActionOption> actionOptions, Random random)
         {
             float scoreLenience = (float)(random.NextDouble() * maxScoreLenience);
 
-            actionOptions.Sort((a, b) => -a.ActionScore().CompareTo(b.ActionScore()));
             var possibleActions = new List<ActionOption>(actionOptions);
-            var topScore = actionOptions[0].ActionScore();
+            possibleActions.Sort((a, b) => -a.ActionScore().CompareTo(b.ActionScore()));
+            var topScore = possibleActions[0].ActionScore();
             possibleActions.RemoveAll((x) => x.ActionScore() < Mathf.Max(0, (topScore - scoreLenience)));
 
             int action = random.Next(possibleActions.Count);

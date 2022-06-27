@@ -2,6 +2,9 @@ using Zenject;
 using UnityEngine;
 using UniRx;
 using System;
+using UniKit.Attributes;
+using System.Collections.Generic;
+using Random = System.Random;
 
 namespace Phoder1.SpaceEmpires
 {
@@ -9,7 +12,7 @@ namespace Phoder1.SpaceEmpires
     {
         IColony Colony { get; }
         bool CanMine { get; }
-        bool CanAttack { get; }
+        int AttackDamage { get; }
     }
     public class Unit : Entity, IUnit
     {
@@ -18,20 +21,30 @@ namespace Phoder1.SpaceEmpires
         [SerializeField]
         private bool canMine;
         [SerializeField]
-        private bool canAttack;
+        private int attackDamage = 0;
         [SerializeField]
         private SpriteRenderer activeSymbol;
+        [SerializeField, Inline]
+        protected ActionSelector actionSelector;
 
         [Inject]
-        private IEntityTurnsManager turnsManager;
+        protected IEntityTurnsManager turnsManager;
+        [Inject]
+        protected Random random;
 
         public float Speed => speed;
-
         public virtual IColony Colony { get; private set; }
-
         public bool CanMine => canMine;
+        protected virtual IEnumerable<ActionOption> ActionOptions
+        {
+            get
+            {
+                yield return new ActionOption(WaitAction, () => 0);
+            }
+        }
 
-        public bool CanAttack => canAttack;
+        public int AttackDamage => attackDamage;
+
         public ITurnAction TakeAction(int turnNumber)
         {
             activeSymbol.enabled = true;
@@ -39,7 +52,9 @@ namespace Phoder1.SpaceEmpires
         }
         protected virtual ITurnAction Action(int turnNumber)
         {
-            return new TurnAction("Wait");
+            var action = actionSelector.SelectAction(ActionOptions, random);
+
+            return action.Action(turnNumber);
         }
         public void StopAction() => activeSymbol.enabled = false;
         protected override void OnInit()
@@ -71,5 +86,7 @@ namespace Phoder1.SpaceEmpires
             newUnit.Init();
             return newUnit;
         }
+
+        private static ITurnAction WaitAction(int arg) => new TurnAction("Wait");
     }
 }

@@ -98,5 +98,7 @@ MonoBehaviour:
     value: 0
   speed: 1
   canMine: 1
-  canAttack: 0
+  attackDamage: 0
   activeSymbol: {fileID: 2157677264608811980}
+  actionSelector:
+    maxScoreLenience: 4

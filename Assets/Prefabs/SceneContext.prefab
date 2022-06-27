@@ -132,7 +132,7 @@ MonoBehaviour:
   _instance:
     minTurnSpeed: 2
     maxTurnSpeed: 0.1
-    maxSpeedTurnNumber: 40
+    maxSpeedTurnNumber: 150
 --- !u!114 &4500309279726925782
 MonoBehaviour:
   m_ObjectHideFlags: 0

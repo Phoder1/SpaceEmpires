@@ -25,12 +25,10 @@ namespace Phoder1.SpaceEmpires
         Result<Tween> ForceMove(IEntity unit, Vector2Int to, bool overrunOtherEntities = false);
         Result<IDisposable> Add(IEntity entity, Vector2Int position);
         Result<IDisposable> Add(IEntity entity);
-        TEntity FindNearest<TEntity>(IEntity from, bool ignoreRuined)
+        TEntity FindNearest<TEntity>(IEntity from, Predicate<TEntity> predicate)
             where TEntity : class, IEntity;
-        TInteractable FindNearestInteractable<TInteractable>(IUnit from, bool ignorUninteractable)
-            where TInteractable : class, IInteractable, IEntity;
         Result<GridPathfindResult> MoveAsCloseAsPossibleTo(IEntity entity, Vector2Int to);
-        int CountEntities<T>(Func<T, bool> predicate);
+        int CountEntities<T>(Predicate<T> predicate);
     }
     [Serializable]
     public class Board : MonoBehaviour, IBoard
@@ -142,7 +140,7 @@ namespace Phoder1.SpaceEmpires
 
         private bool ReachedTarget(Vector2Int targetPosition, Vector2Int currentPosition, GridPathfindingSettings settings)
             => currentPosition.IsNeighborOf(targetPosition, settings.canMoveDiagonaly);
-        public TEntity FindNearest<TEntity>(IEntity from, bool ignoreRuined)
+        public TEntity FindNearest<TEntity>(IEntity from, Predicate<TEntity> predicate)
             where TEntity : class, IEntity
         {
             var pos = from.BoardPosition;
@@ -152,13 +150,9 @@ namespace Phoder1.SpaceEmpires
             tiles.Sort((a, b) => a.Key.TileSteps(pos, from.CanMoveDiagonally).CompareTo(b.Key.TileSteps(pos, from.CanMoveDiagonally)));
 
             foreach (var tile in tiles)
-            {
-                if (ignoreRuined && tile.Value.Ruined.Value)
-                    continue;
-
                 if (tile.Value is TEntity target)
-                    return target;
-            }
+                    if (predicate?.Invoke(target) ?? true)
+                        return target;
 
             return null;
         }
@@ -168,29 +162,7 @@ namespace Phoder1.SpaceEmpires
             Gizmos.DrawWireCube(boardArea.center, (Vector2)boardArea.size);
         }
 
-        public TInteractable FindNearestInteractable<TInteractable>(IUnit from, bool ignorUninteractable)
-            where TInteractable : class, IInteractable, IEntity
-        {
-            var pos = from.BoardPosition;
-            var tiles = new List<KeyValuePair<Vector2Int, IEntity>>(Map);
-
-            //Sort by distance
-            tiles.Sort((a, b) => a.Key.TileSteps(pos, from.CanMoveDiagonally).CompareTo(b.Key.TileSteps(pos, from.CanMoveDiagonally)));
-
-            foreach (var tile in tiles)
-            {
-                if (ignorUninteractable && tile.Value.Ruined.Value)
-                    continue;
-
-                if (tile.Value is TInteractable target
-                    && (!ignorUninteractable || target.IsInteractable()))
-                    return target;
-            }
-
-            return null;
-        }
-
-        public int CountEntities<T>(Func<T, bool> predicate = null)
+        public int CountEntities<T>(Predicate<T> predicate = null)
         {
             var tiles = new List<KeyValuePair<Vector2Int, IEntity>>(Map);
             int count = 0;
@@ -203,6 +175,30 @@ namespace Phoder1.SpaceEmpires
             }
 
             return count;
+        }
+
+        public Dictionary<TEntity, int> GetAllInRange<TEntity>(IEntity from, int range, Predicate<TEntity> predicate, bool usePathDistance = false)
+            where TEntity : class, IEntity
+        {
+            var entities = new Dictionary<TEntity, int>();
+            int count = 0;
+
+            foreach (var tile in Map)
+            {
+                if (tile.Value is TEntity target
+                    && (predicate?.Invoke(target) ?? true))
+                {
+                    int distance;
+                    if (usePathDistance)
+                        distance = GetPath(from, target.BoardPosition).PathLength;
+                    else
+                        distance = from.BoardPosition.TileSteps(target.BoardPosition, from.CanMoveDiagonally);
+
+                    entities.Add(target, distance);
+                }
+            }
+
+            return entities;
         }
     }
 

@@ -1,7 +1,7 @@
+using UniKit.Attributes;
+using UniRx;
 using UnityEngine;
 using Zenject;
-using UniRx;
-using UniKit.Attributes;
 
 namespace Phoder1.SpaceEmpires
 {
@@ -62,6 +62,7 @@ namespace Phoder1.SpaceEmpires
         }
         protected virtual void OnInit()
         {
+            hp.Where((x) => x <= 0).Subscribe((x) => ruined.Value = true);
             var boardSub = board.Add(this);
             if (boardSub && removeFromBoardOnRuined)
                 boardSub.Value.AddTo(onRuinedDisposables);
@@ -74,7 +75,7 @@ namespace Phoder1.SpaceEmpires
 
             ruined.Value = true;
 
-            MainSpriteRenderer.color = Color.gray;
+            MainSpriteRenderer.color = new Color(0.7f, 0.7f, 0.7f, 1f);
             onRuinedDisposables.Dispose();
         }
     }
