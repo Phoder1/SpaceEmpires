@@ -1,4 +1,3 @@
-using System;
 using UniKit.Attributes;
 using UniRx;
 using UnityEngine;
@@ -70,7 +69,7 @@ namespace Phoder1.SpaceEmpires
             var deathObservable = hp.Select((x) => x <= 0);
             var relativeHpObserv = hp.Select((x) => (float)x / (float)initialHp);
 
-            relativeHpObserv.Subscribe(HpChanged); 
+            relativeHpObserv.Subscribe(HpChanged);
 
             var boardSub = board.Add(this);
             if (boardSub && removeFromBoardOnRuined)

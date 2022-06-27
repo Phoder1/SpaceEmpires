@@ -28,8 +28,8 @@ namespace Phoder1.SpaceEmpires
 
             var target = GetNearestTarget();
 
-            if (target == null)
-                return -1;
+            if (target == null || !board.GetPath(this, target.BoardPosition).HasPath)
+                return -1000;
 
             //Add danger level
             return 10;

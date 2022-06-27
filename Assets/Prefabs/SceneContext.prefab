@@ -130,9 +130,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _instance:
-    minTurnSpeed: 1.5
-    maxTurnSpeed: 0.4
-    maxSpeedTurnNumber: 150
+    minTurnSpeed: 2
+    maxTurnSpeed: 0.05
+    maxSpeedTurnNumber: 45
 --- !u!114 &4500309279726925782
 MonoBehaviour:
   m_ObjectHideFlags: 0

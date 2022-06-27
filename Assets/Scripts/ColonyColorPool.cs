@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UniRx;
-using System;
 using System.Linq;
+using UniRx;
+using UnityEngine;
 
 namespace Phoder1.SpaceEmpires
 {
@@ -26,7 +24,7 @@ namespace Phoder1.SpaceEmpires
             {
                 foreach (KeyValuePair<IColony, ReactiveProperty<Color>> color in colonyColors)
                 {
-                     Color.RGBToHSV(color.Value.Value, out var h, out var s, out var v);
+                    Color.RGBToHSV(color.Value.Value, out var h, out var s, out var v);
                     var hStep = Time.deltaTime / trollCycleTime;
                     color.Value.Value = Color.HSVToRGB(Normalized(h + hStep), s, v);
                 }
@@ -34,22 +32,26 @@ namespace Phoder1.SpaceEmpires
         }
         public IReadOnlyReactiveProperty<Color> AddColony(IColony newColony)
         {
-            if(colonyColors.TryGetValue(newColony, out var newColonyColor))
+            if (colonyColors.TryGetValue(newColony, out var newColonyColor))
                 return newColonyColor;
 
-            var colors = GenerateColors(colonyColors.Count + 1);
-
-            var colonies = colonyColors.Keys.ToArray();
-            for (int i = 0; i < colonies.Length; i++)
-                colonyColors[colonies[i]].Value = colors[i];
-
-            var property = new ReactiveProperty<Color>(colors[colors.Length - 1]);
+            var property = new ReactiveProperty<Color>();
             colonyColors.Add(newColony, property);
             readonlyColonyColors.Add(newColony, property);
+
+            UpdateColors();
 
             return property;
         }
 
+        private void UpdateColors()
+        {
+            var colors = GenerateColors(colonyColors.Count);
+
+            var colonies = colonyColors.Keys.ToArray();
+            for (int i = 0; i < colonies.Length; i++)
+                colonyColors[colonies[i]].Value = colors[i];
+        }
         private Color[] GenerateColors(int amount)
         {
             Color.RGBToHSV(startColor, out var h, out var s, out var v);
@@ -64,5 +66,11 @@ namespace Phoder1.SpaceEmpires
 
         private float Normalized(float value)
             => Mathf.Abs(value) % 1f;
+
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+                UpdateColors();
+        }
     }
 }

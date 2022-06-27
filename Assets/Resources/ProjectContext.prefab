@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1755a444ee6a17d42b0f288181dc9143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startColor: {r: 0.31248996, g: 0.7735849, b: 0.22258809, a: 1}
+  startColor: {r: 0.6792453, g: 0.65907735, b: 0.1435386, a: 1}
   troll: 0
   trollCycleTime: 4
 --- !u!114 &8169168759875245931

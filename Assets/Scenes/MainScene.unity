@@ -441,6 +441,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -3195730235426156474, guid: 3ed58abe687ecf74c8a11ec6804509a6, type: 3}
+      propertyPath: speed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3195730235426156474, guid: 3ed58abe687ecf74c8a11ec6804509a6, type: 3}
       propertyPath: aggressivness
       value: -2.5
       objectReference: {fileID: 0}
@@ -1956,6 +1960,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -3195730235426156474, guid: 3ed58abe687ecf74c8a11ec6804509a6, type: 3}
+      propertyPath: speed
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: -3195730235426156474, guid: 3ed58abe687ecf74c8a11ec6804509a6, type: 3}
       propertyPath: aggressivness
       value: 7.5
       objectReference: {fileID: 0}
@@ -2140,6 +2148,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -3195730235426156474, guid: 3ed58abe687ecf74c8a11ec6804509a6, type: 3}
+      propertyPath: speed
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: -3195730235426156474, guid: 3ed58abe687ecf74c8a11ec6804509a6, type: 3}
       propertyPath: aggressivness
       value: 2.5
@@ -3177,14 +3189,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4500309279726925785, guid: f8cb987d7c9c6924e89d67a46c61bde1, type: 3}
-      propertyPath: _instance.maxTurnSpeed
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4500309279726925785, guid: f8cb987d7c9c6924e89d67a46c61bde1, type: 3}
-      propertyPath: _instance.maxSpeedTurnNumber
-      value: 40
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8cb987d7c9c6924e89d67a46c61bde1, type: 3}
 --- !u!1001 &7012350900329991054
@@ -3258,7 +3262,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -3195730235426156474, guid: 3ed58abe687ecf74c8a11ec6804509a6, type: 3}
       propertyPath: speed
-      value: 0.25
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: -3195730235426156474, guid: 3ed58abe687ecf74c8a11ec6804509a6, type: 3}
       propertyPath: aggressivness
