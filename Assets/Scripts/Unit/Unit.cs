@@ -34,7 +34,7 @@ namespace Phoder1.SpaceEmpires
         [Inject]
         protected Random random;
 
-        private int KillReward => ProjectPrefs.GetInt("Kill reward");
+        private int KillReward => SpaceEmpiresSettings.KillReward;
         public float Speed => speed;
         public virtual IColony Colony { get; private set; }
         public bool CanMine => canMine;
@@ -45,6 +45,7 @@ namespace Phoder1.SpaceEmpires
                 yield return new ActionOption(WaitAction, () => 0);
             }
         }
+        private static ITurnAction WaitAction(int arg) => new TurnAction("Wait");
 
         public int AttackDamage => attackDamage;
 
@@ -91,7 +92,6 @@ namespace Phoder1.SpaceEmpires
             return newUnit;
         }
 
-        private static ITurnAction WaitAction(int arg) => new TurnAction("Wait");
 
         public bool IsInteractable()
             => !Ruined.Value;

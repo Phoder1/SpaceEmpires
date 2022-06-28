@@ -1,11 +1,10 @@
 using System.Collections.Generic;
+using TMPro;
 using UniKit;
-using UniKit.Attributes;
 using UniKit.Project;
 using UniRx;
 using UnityEngine;
 using Zenject;
-using Random = System.Random;
 
 namespace Phoder1.SpaceEmpires
 {
@@ -27,6 +26,8 @@ namespace Phoder1.SpaceEmpires
         private int maxSpawnScoreAmount;
         [SerializeField]
         private float aggressivness = 0;
+        [SerializeField]
+        private TextMeshProUGUI resourcesText;
 
         [Inject]
         protected ColonyColorPool colonyColorPool;
@@ -60,7 +61,8 @@ namespace Phoder1.SpaceEmpires
 
         protected override void OnInit()
         {
-            resources.Value = ProjectPrefs.GetInt("Initial resources");
+            resources.Value = SpaceEmpiresSettings.InitialResources;
+            resources.Subscribe((x) => resourcesText.text = x.ToString());
             ColonyColor = colonyColorPool.AddColony(this);
             base.OnInit();
         }
@@ -76,7 +78,7 @@ namespace Phoder1.SpaceEmpires
         private ITurnAction SpawnSoldier(int arg)
         {
             var spawnPos = GetFreeSpawnPosition();
-            var prefab = ProjectPrefs.GetGameObject("Soldier prefab").GetComponent<Unit>();
+            var prefab = SpaceEmpiresSettings.SoldierPrefab.GetComponent<Unit>();
             Instantiate(prefab, this, spawnPos.Value, container);
             resources.Value -= SoldierCost;
             return new TurnAction("Spawned Soldier");
@@ -93,7 +95,7 @@ namespace Phoder1.SpaceEmpires
         private ITurnAction SpawnWorker(int arg)
         {
             var spawnPos = GetFreeSpawnPosition();
-            var prefab = ProjectPrefs.GetGameObject("Worker prefab").GetComponent<Unit>();
+            var prefab = SpaceEmpiresSettings.WorkerPrefab.GetComponent<Unit>();
             Instantiate(prefab, this, spawnPos.Value, container);
             resources.Value -= WorkerCost;
             return new TurnAction("Spawned Worker");

@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c29ff3c13eaafcd43b5f5806bf5e65cb, type: 3}
-  m_Name: SpaceEmpiresProjectSettings
+  m_Script: {fileID: 11500000, guid: 3d41effc2e6962249adf31e355ed7f80, type: 3}
+  m_Name: ProjectPrefs
   m_EditorClassIdentifier: 
-  _test: 
-  _test2: 
-  _test3: 
-  _test4: 
-  _test5: 
+  intProperties: []
+  stringProperties: []
+  floatProperties: []
+  gameObjectProperties: []
+  spriteProperties: []

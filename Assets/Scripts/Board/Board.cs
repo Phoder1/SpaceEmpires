@@ -43,11 +43,10 @@ namespace Phoder1.SpaceEmpires
         private ITimedTurns turns;
 
         private readonly Map<Vector2Int, IEntity> map = new Map<Vector2Int, IEntity>();
-        private Lazy<float> tileSize = new Lazy<float>(() => ProjectPrefs.GetFloat("Tile size"));
 
         public IReadonlyMap<Vector2Int, IEntity> Map => map;
 
-        public float TileSize => tileSize.Value;
+        public float TileSize => SpaceEmpiresSettings.TileSize;
 
         public RectInt BoardArea => boardArea;
 
@@ -207,7 +206,7 @@ namespace Phoder1.SpaceEmpires
 
     public static class BoardExt
     {
-        public static float TileSize = ProjectPrefs.GetFloat("Tile size");
+        public static float TileSize = SpaceEmpiresSettings.TileSize;
         public static Vector2 GridToWorldPosition(this Vector2Int gridPos)
             => (Vector2)gridPos * TileSize;
         public static Vector2Int WorldToGridPosition(this Vector3 worldPos)
