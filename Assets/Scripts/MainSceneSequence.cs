@@ -9,7 +9,7 @@ namespace Phoder1.SpaceEmpires
     public class MainSceneSequence : MonoBehaviour
     {
         [Inject]
-        private ITurns turns;
+        private ITimedTurns turns;
 
         private void Start()
         {

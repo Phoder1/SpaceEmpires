@@ -9,7 +9,7 @@ namespace Phoder1.SpaceEmpires
 {
     public interface IEntityTurnsManager
     {
-        ITurns Turns { get; }
+        ITimedTurns Turns { get; }
         IReadOnlyList<ITurnTakeable> EntityTurns { get; }
         IDisposable Subscribe(ITurnTakeable turnTakeable);
         float GetEntityNextTurn(ITurnTakeable turnTakeable);
@@ -22,7 +22,7 @@ namespace Phoder1.SpaceEmpires
         private readonly Dictionary<ITurnTakeable, int> lastTurnPlayed = new Dictionary<ITurnTakeable, int>();
 
         [Inject]
-        private void Constrcut(ITurns turns)
+        private void Constrcut(ITimedTurns turns)
         {
             Turns = turns;
             Turns.TurnNumber.Subscribe(TakeTurn);
@@ -67,7 +67,7 @@ namespace Phoder1.SpaceEmpires
 
             currentActive.StopAction();
         }
-        public ITurns Turns { get; private set; }
+        public ITimedTurns Turns { get; private set; }
 
         private readonly List<ITurnTakeable> entityTurns = new List<ITurnTakeable>();
         public IReadOnlyList<ITurnTakeable> EntityTurns => entityTurns;

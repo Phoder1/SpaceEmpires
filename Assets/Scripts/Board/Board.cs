@@ -40,7 +40,7 @@ namespace Phoder1.SpaceEmpires
         private RectInt boardArea = new RectInt(Vector2Int.zero, Vector2Int.one * 10);
 
         [Inject]
-        private ITurns turns;
+        private ITimedTurns turns;
 
         private readonly Map<Vector2Int, IEntity> map = new Map<Vector2Int, IEntity>();
         private Lazy<float> tileSize = new Lazy<float>(() => ProjectPrefs.GetFloat("Tile size"));
