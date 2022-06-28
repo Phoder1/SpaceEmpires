@@ -1,12 +1,13 @@
 {
   "dependencies": {
     "com.phoder1.unikit": {
-      "version": "file:com.phoder1.unikit",
+      "version": "https://github.com/Phoder1/UniKit.git",
       "depth": 0,
-      "source": "embedded",
+      "source": "git",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2"
-      }
+      },
+      "hash": "c9c948decfa72441d1935bb4bab520da9739cad1"
     },
     "com.unity.2d.animation": {
       "version": "7.0.6",
